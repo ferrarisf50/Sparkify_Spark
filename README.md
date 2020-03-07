@@ -71,10 +71,10 @@ start_time, hour, day, week, month, year, weekday
 
 ## Scripts <a name="Scripts"></a>
 
-- **etl.py** - Reads and processes all song datasets and log datasets, then loads into S3.
-               To facilitate testing the program, there are two options (Select Y or N) before starting Spark session:
-               Load data from Udacity S3 (Y) or load test data from local directory (N)? 
-               Write data into my S3 (Y) or write into local directory (N)? 
+- **etl.py** - Reads and processes all song datasets and log datasets, then loads into S3.</br>
+               To facilitate testing the program, there are two options (Select Y or N) before starting Spark session:</br>
+               Load data from Udacity S3 (Y) or load test data from local directory (N)? </br>
+               Write data into my S3 (Y) or write into local directory (N)? </br>
 
 ## Getting Started <a name="Started"></a>
 
