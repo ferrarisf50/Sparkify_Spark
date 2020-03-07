@@ -213,10 +213,10 @@ def main():
     
     answer = input("Load data from Udacity S3 (Y) or load test data from local directory (N)? ")
     if answer.upper() == "Y":
-        #input_log_data = "s3a://udacity-dend/log_data/*/*/*.json"
-        #input_song_data = "s3a://udacity-dend/song_data/*/*/*/*.json"
-        input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
-        input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
+        input_log_data = "s3a://udacity-dend/log_data/*/*/*.json"
+        input_song_data = "s3a://udacity-dend/song_data/*/*/*/*.json"
+        #input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
+        #input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
     else:
         input_log_data = "data/*.json"
         input_song_data = "data/song_data/*/*/*/*.json"
