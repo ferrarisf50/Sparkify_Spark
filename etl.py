@@ -76,14 +76,15 @@ def process_song_data(spark, input_data, output_data):
 
 '''
 
-def process_log_song_data(spark, input_data, output_data):
+def process_log_song_data(spark, input_song_data, input_log_data,output_data):
     """
     Read log and song JSON files, extract and transform data, create songs table, artists table, time table, users table, and    songplays table,
     save into parquet files
     
     INPUT: 
     spark - Spark session
-    input_data - Root path of the log and song JSON files
+    input_song_data -Path of song JSON files
+    input_log_data - Path of log JSON files
     output_data - Root path of the output files
     
     OUTPUT:
@@ -91,16 +92,16 @@ def process_log_song_data(spark, input_data, output_data):
     """
     
     # get filepath to log and song data file
-    log_data = "log_data/*.json"
-    song_data = "song_data/*/*/*/*.json"
+    
+    
     
     # read log and song data file
     print("Reading song data...")
-    df = spark.read.json(input_data+song_data)
+    df = spark.read.json(input_song_data)
     print("Song data has %s obs." % df.count())
     
     print("Reading log data...")
-    df2 = spark.read.json(input_data+log_data)
+    df2 = spark.read.json(input_log_data)
     print("Log data has %s obs." % df2.count())
     
     # read song data file
@@ -212,10 +213,14 @@ def main():
     
     answer = input("Load data from Udacity S3 (Y) or load test data from local directory (N)? ")
     if answer.upper() == "Y":
-        input_data = "s3a://udacity-dend/"
+        #input_log_data = "s3a://udacity-dend/log_data/*/*/*.json"
+        #input_song_data = "s3a://udacity-dend/song_data/*/*/*/*.json"
+        input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
+        input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
     else:
-        input_data = "data/"
-    
+        input_log_data = "data/*.json"
+        input_song_data = "data/song_data/*/*/*/*.json"
+        
     answer = input("Write data into my S3 (Y) or write into local directory (N)? ")
     if answer.upper() == "Y":
         output_data = "s3a://ferrarisf50/"
@@ -228,7 +233,7 @@ def main():
     
     
     
-    process_log_song_data(spark, input_data, output_data)    
+    process_log_song_data(spark, input_song_data, input_log_data, output_data)    
     
 
 
