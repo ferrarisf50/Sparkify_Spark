@@ -142,7 +142,8 @@ def process_log_song_data(spark, input_song_data, input_log_data,output_data):
     
     # extract columns for users table    
     users_table = spark.sql("""
-    select distinct(userId) as user_id,
+    select distinct 
+    userId as user_id,
     firstName as first_name,
     lastName as last_name,
     gender,
@@ -178,7 +179,7 @@ def process_log_song_data(spark, input_song_data, input_log_data,output_data):
     
     # write time table to parquet files partitioned by year and month
     print("Writing time table to parquet files...")
-    time_table.write.parquet(output_data+"time.parquet",mode='overwrite')
+    time_table.write.parquet(output_data+"time.parquet",mode='overwrite',partitionBy=("year", "month"))
     
     
     # read in song data to use for songplays table
@@ -190,6 +191,8 @@ def process_log_song_data(spark, input_song_data, input_log_data,output_data):
     
     monotonically_increasing_id() as songplay_id,
     from_unixtime(ts/1000) as start_time,
+    month(from_unixtime(ts/1000) ) as month,
+    year(from_unixtime(ts/1000) ) as year,
     userId as user_id,
     level,
     a.song_id,
@@ -206,7 +209,7 @@ def process_log_song_data(spark, input_song_data, input_log_data,output_data):
     
     # write songplays table to parquet files partitioned by year and month
     print("Writing songplays table to parquet files...")
-    songplays_table.write.parquet(output_data+"songplays.parquet",mode='overwrite')
+    songplays_table.write.parquet(output_data+"songplays.parquet",mode='overwrite',partitionBy=("year", "month"))
 
 
 def main():
@@ -218,7 +221,7 @@ def main():
         #input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
         #input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
     else:
-        input_log_data = "data/*.json"
+        input_log_data = "data/log_data/*.json"
         input_song_data = "data/song_data/*/*/*/*.json"
         
     answer = input("Write data into my S3 (Y) or write into local directory (N)? ")
