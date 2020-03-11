@@ -7,7 +7,8 @@ from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, dat
 
 
 config = configparser.ConfigParser()
-config.read('dl.cfg')
+#config.read(r'dl.cfg')
+config.read(r'/home/hadoop/dl.cfg')
 
 os.environ['AWS_ACCESS_KEY_ID'] = config.get('AWS','AWS_ACCESS_KEY_ID')
 os.environ['AWS_SECRET_ACCESS_KEY']= config.get('AWS','AWS_SECRET_ACCESS_KEY')
@@ -26,6 +27,10 @@ def create_spark_session():
         .builder \
         .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
         .getOrCreate()
+    
+    sc = spark.sparkContext
+    sc._jsc.hadoopConfiguration().set("mapreduce.fileoutputcommitter.algorithm.version", "2")
+    
     return spark
 
 '''
@@ -213,13 +218,13 @@ def process_log_song_data(spark, input_song_data, input_log_data,output_data):
 
 
 def main():
-    
+    '''
     answer = input("Load data from Udacity S3 (Y) or load test data from local directory (N)? ")
     if answer.upper() == "Y":
         input_log_data = "s3a://udacity-dend/log_data/*/*/*.json"
         input_song_data = "s3a://udacity-dend/song_data/*/*/*/*.json"
-        #input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
-        #input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
+        input_log_data = "s3a://udacity-dend/log_data/2018/11/*.json"
+        input_song_data = "s3a://udacity-dend/song_data/A/A/A/*.json"
     else:
         input_log_data = "data/log_data/*.json"
         input_song_data = "data/song_data/*/*/*/*.json"
@@ -229,8 +234,12 @@ def main():
         output_data = "s3a://ferrarisf50/"
     else:
         output_data = "output/"
-        
-        
+    '''    
+     
+    input_log_data = "s3a://udacity-dend/log_data/*/*/*.json"
+    input_song_data = "s3a://udacity-dend/song_data/*/*/*/*.json"
+    output_data = "s3a://ferrarisf50/"
+    
     spark = create_spark_session()
     
     
